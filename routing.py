@@ -43,17 +43,17 @@ def findLinesWithStation(station):
     lines = set()
     now_utc = datetime.now(timezone('UTC'))
     now_eastern = now_utc.astimezone(timezone('US/Eastern'))
-    if now_eastern.hour < 5 and now_eastern.hour > 1 and now_eastern.minute > 30:
+    if now_eastern.hour <= 5 and now_eastern.hour >= 1 and now_eastern.minute >= 30:
         return lines
     if station in red.stations:
-        if now_eastern.hour > 21 and now_eastern.hour < 2:
+        if now_eastern.hour >= 21 and now_eastern.hour <= 2:
             lines.add(red_night)
         else:
             lines.add(red)
     if station in gold.stations:
         lines.add(gold)
     if station in green.stations:
-        if now_eastern.hour > 21 and now_eastern.hour < 2:
+        if now_eastern.hour >= 21 and now_eastern.hour <= 2:
             lines.add(green_night)
         else:
             lines.add(green)
