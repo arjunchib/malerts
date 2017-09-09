@@ -1,10 +1,12 @@
 from flask import Flask, request, redirect
 import os
 from twilio.twiml.messaging_response import Body, Media, Message, MessagingResponse
-from difflib import SequenceMatcher
+# from difflib import SequenceMatcher
+from difflib import get_close_matches
+from stations import getStationsDict
 
-def similar(a, b):
-    return SequenceMatcher(None, a, b).ratio()
+# def similar(a, b):
+#     return SequenceMatcher(None, a, b).ratio()
 
 app = Flask(__name__)
 
@@ -72,18 +74,28 @@ def sms_reply():
 
 		toIndex = bodyArray.index("to")
 		origin = ' '.join(bodyArray[0:toIndex])
-		print(origin)
 		destination = ' '.join(bodyArray[toIndex+1:])
-		print(destination)
+
+		stationsDict = getStationsDict()
+		keys = stationsDict.keys()
+
+		originFinalKeyList = get_close_matches(origin, keys, 1)
+		destinationFinalKeyList = get_close_matches(destination, keys, 1)
 
 		# if text contains "to" but does not contain valid station names
-		if (origin not in stations or destination not in stations):
+		if (len(originFinalKeyList) == 0 or len(destinationFinalKeyList) == 0):
 			print("Text contains to but not valid station names")
 			message.body("Hmm, you didn't use the right format... Please text me a valid origin and a destination. For example: Doraville to Midtown")
 			response.append(message)
 			return str(response)
 
-		message.body("Cool. So you're going from " + origin.capitalize() + " to " + destination.capitalize() + ". Let me check on that!")
+		originFinalKey = originFinalKeyList[0]
+		destinationFinalKey = destinationFinalKeyList[0]
+
+		finalOrigin = stationsDict[originFinalKey]
+		finalDestination = stationsDict[destinationFinalKey]
+			
+		message.body("Cool. So you're going from " + finalOrigin + " to " + finalDestination + ". Let me check on that!")
 		response.append(message)
 
 	# if text says something invalid
