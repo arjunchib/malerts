@@ -64,13 +64,19 @@ def sms_reply():
 	for hi in waysToSayHi:
 		if hi in bodyArray:
 			print("Text says hi")
-			message.body("Hi, I'm Martan from mAlerts! If you need a MARTA map, I got you. Please text me an origin and a destination. For example: Doraville to Midtown")
-			message.media("http://www.itsmarta.com/images/train-stations-map.jpg")
+			message.body("Hi, I'm Martan from mAlerts! Please text me an origin and a destination. For example: 'Doraville to Midtown'. Or if you want to see a full MARTA map, text me 'map'.")
 			response.append(message)
 			return str(response)
 
+	# if text says "map"
+	if "map" in bodyArray:
+		message.body("Here's the MARTA map!")
+		message.media("http://www.itsmarta.com/images/train-stations-map.jpg")
+		response.append(message)
+		return str(response)
+
 	# if text says "<station> to <station>""
-	if ("to" in bodyArray):
+	elif ("to" in bodyArray):
 		print("Text says <station> to <station>")
 
 		toIndex = bodyArray.index("to")
@@ -116,11 +122,12 @@ def sms_reply():
 
 		message.body(output)
 		response.append(message)
+		return str(response)
 
 	# if text says something invalid
 	else:
-		message.body("Hey, it looks like you said something not valid! Just send me a hello or your origin and destination stations. For example: Doraville to Midtown")
-
+		message.body("Hey, it looks like you said something that's not valid! Just send me a hello or your origin and destination stations. For example: 'Doraville to Midtown'.")
+		response.append(message)
 
 	return str(response)
 
