@@ -1,58 +1,73 @@
-red = Line("red", ["North Springs", "Sandy Springs", "Dunwoody", "Medical Center"
-, "Buckhead", "Art Center", "Midtown", "North Avenue", "Civic Center",
-"Peachtree Center", "Five Points", "Garnett", "Oakland City",
-"Lakewood", "East Point", "College Park", "Airpirt"])
+red =
+Line(
+    "red",
+    ["North Springs", "Sandy Springs", "Dunwoody", "Medical Center", "Buckhead", "Lindbergh Center", "Art Center", "Midtown", "North Avenue", "Civic Center", "Peachtree Center", "Five Points", "Garnett", "Oakland City", "Lakewood", "East Point", "College Park", "Airport"],
+    {
+        gold: "Lindbergh Center",
+        green: "Five Points",
+        blue: "Five Points"
+    }
+)
 
-gold = Line("gold", ["Doravile", "Chamblee", "Brookhaven", "Oglethorpe",
-"Lenox", "Lindberghh Center", "Art Center", "Midtown", "North Avenue",
-"Civic Center", "Peachtree Center", "Five Points", "Garnett",
-"Oakland City", "Lakewood", "East Point", "College Park", "Airpirt"])
+red_night =
+Line(
+    "red",
+    ["North Springs", "Sandy Springs", "Dunwoody", "Medical Center", "Buckhead", "Lindbergh Center"],
+    {
+        gold: "Lindbergh Center",
+        green: "Lindbergh Center",
+        blue: "Lindbergh Center"
+    }
+    night=True
+)
 
-blue = Line("blue", ["Indian Creek", "Kensington", "Avondale", "Decatur",
-"East Lake", "Edgewood", "Candler Park", "Inman Park", "Reynoldstown",
-"King Memorial", "Georgia State", "Five Points", "Dome",
-"Philips Areana", "CNN Center", "Vine City", "Ashby", "West Lake",
-"Hamilton E. Holmes"])
+gold =
+Line(
+    "gold",
+    ["Doravile", "Chamblee", "Brookhaven/Oglethorpe", "Lenox", "Lindbergh Center", "Art Center", "Midtown", "North Avenue", "Civic Center", "Peachtree Center", "Five Points", "Garnett", "West End", "Oakland City", "Lakewood/Fort McPherson", "East Point", "College Park", "Airport"],
+    {
+        red: "Lindbergh Center",
+        green: "Five Points",
+        blue: "Five Points"
+    }
+)
 
-green = Line("green", ["Edgewood", "Candler Park", "Inman Park", "Reynoldstown",
-"King Memorial", "Georgia State", "Five Points", "Dome",
-"Philips Areana", "CNN Center", "Vine City", "Ashby", "Bankhead"])
+blue =
+Line("blue",
+    ["Indian Creek", "Kensington", "Avondale", "Decatur", "East Lake", "Edgewood", "Candler Park", "Inman Park", "Reynoldstown", "King Memorial", "Georgia State", "Five Points", "Dome", "Philips Areana", "CNN Center", "Vine City", "Ashby", "West Lake", "Hamilton E. Holmes"],
+    {
+        red: "Five Points",
+        gold: "Five Points"
+        green: "Ashby"
+    }
+ )
+
+green =
+Line("green",
+    ["Edgewood", "Candler Park", "Inman Park", "Reynoldstown", "King Memorial", "Georgia State", "Five Points", "Dome", "Philips Areana", "CNN Center", "Vine City", "Ashby", "Bankhead"],
+    {
+        red: "Five Points",
+        gold: "Five Points"
+        blue: "Ashby"
+    }
+)
+
+green_night =
+Line("green",
+    ["Edgewood", "Candler Park", "Inman Park", "Reynoldstown", "King Memorial", "Georgia State", "Five Points", "Dome", "Philips Areana", "CNN Center", "Vine City", "Ashby", "Bankhead"],
+    {
+        red: "Vine City",
+        gold: "Vine City"
+        blue: "Vine City"
+    }
+    night=True
+)
 
 class Line:
     """A MARTA line of stations"""
 
-    def __init__(self, name, stations):
+    def __init__(self, name, stations, transfers=[], night=False):
         self.name = name
         self.stations = stations
-
-def findRoute(origin, dest):
-    origin_lines = findLinesWithStation(origin)
-    dest_lines = findLinesWithStation(dest)
-    route = []
-    if origin_lines == dest_lines:
-        if len(origin_lines) == 1:
-            route.append("Take the " + origin_lines[0].name + " line " + findDirection(origin, dest, origin_lines[0]) + "bound towards " + dest)
-
-def findLinesWithStation(station):
-    lines = []
-    if station in red:
-        lines.append(red)
-    if station in gold:
-        lines.append(gold)
-    if station in green:
-        lines.append(green)
-    if station in blue:
-        lines.append(blue)
-    return lines
-
-def findDirection(origin, dest, line):
-    if line.name is 'red' or line.name is 'gold':
-        if line.index(origin) < line.index(dest):
-            return "North"
-        else:
-            return "South"
-    else:
-        if line.index(origin) < line.index(dest):
-            return "East"
-        else:
-            return "West"
+        self.transfers = transfers
+        self.night = night
