@@ -26,7 +26,6 @@ def sms_reply():
 		i = i.lower()
 		stations.append(i)
 
-
 	# Take 1: Old SDK SMS - passed
 	# resp = MessagingResponse()
 	# resp.message("Hi, I'm MARTAN from mAlerts, here to give you your best rider experience!")
@@ -52,27 +51,25 @@ def sms_reply():
 	lower_request_body = request_body.lower()
 	stripped_request_body = lower_request_body.strip(",.!?/&-:;@'...")
 	bodyArray = stripped_request_body.split(" ")
-	print(stripped_request_body)
 
-	waysToSayHi = ["hi", "hello", "hell", "howdy", "hh", "bonqour", "aloha", "hallo", "halo", "hey", "wassup", "wessup", "what is up", "whats up", "what's up", "hi there", "hithere", "yo", "sup"]
-
-	# if text says "hi" or similar, similar() must return 90% or 0.9
-	# if (similar(stripped_request_body, hi) >= 0.9 for hi in waysToSayHi):
-	# if (hi in bodyArray[0] for hi in waysToSayHi): <-- one line for loop did not work
+	waysToSayHi = ["hi", "hello", "hell", "howdy", "hh", "bonjour", "aloha", "hallo", "halo", "hey", "wassup", "wessup", "what is up", "whats up", "what's up", "hi there", "hithere", "yo", "sup"]
 
 	# checks to see if hi or similar is in text
 	for hi in waysToSayHi:
 		if hi in bodyArray:
-			print("Text says hi")
-			message.body("Hi, I'm Martan from mAlerts! If you need a MARTA map, I got you. Please text me an origin and a destination. For example: Doraville to Midtown")
-			message.media("http://www.itsmarta.com/images/train-stations-map.jpg")
+			message.body("Hi, I'm Martan from mAlerts! Please text me an origin and a destination. For example: 'Doraville to Midtown'. Or if you want to see a full MARTA map, text me 'map'.")
 			response.append(message)
 			return str(response)
 
-	# if text says "<station> to <station>""
-	if ("to" in bodyArray):
-		print("Text says <station> to <station>")
+	# if text says "map"
+	if "map" in bodyArray:
+		message.body("Here's the MARTA map!")
+		message.media("http://www.itsmarta.com/images/train-stations-map.jpg")
+		response.append(message)
+		return str(response)
 
+	# if text says "<station> to <station>""
+	elif ("to" in bodyArray):
 		toIndex = bodyArray.index("to")
 		origin = ' '.join(bodyArray[0:toIndex])
 		destination = ' '.join(bodyArray[toIndex+1:])
@@ -85,7 +82,6 @@ def sms_reply():
 
 		# if text contains "to" but does not contain valid station names
 		if (len(originFinalKeyList) == 0 or len(destinationFinalKeyList) == 0):
-			print("Text contains to but not valid station names")
 			message.body("Hmm, you didn't use the right format... Please text me a valid origin and a destination. For example: Doraville to Midtown")
 			response.append(message)
 			return str(response)
@@ -106,21 +102,22 @@ def sms_reply():
 				output += " Take the "
 			else:
 				output += " Then take the "
-			if len(leg.lines) == 1:
-				output += min(leg.lines) + " line "
-			elif len(leg.lines) == 2:
-				output += min(leg.lines) + " or " + max(leg.lines) + " lines "
-			output += leg.direction.name + "BOUND to "
-			output += leg.destination + " station."
+			if len(leg["lines"]) == 1:
+				output += min(leg["lines"]).name + " line "
+			elif len(leg["lines"]) == 2:
+				output += min(leg["lines"]).name + " or " + max(leg["lines"]).name + " lines "
+			output += leg["direction"].name + "BOUND to "
+			output += leg["destination"] + " station."
 			counter += 1
 
 		message.body(output)
 		response.append(message)
+		return str(response)
 
 	# if text says something invalid
 	else:
-		message.body("Hey, it looks like you said something not valid! Just send me a hello or your origin and destination stations. For example: Doraville to Midtown")
-
+		message.body("Hey, it looks like you said something that's not valid! Just send me a hello or your origin and destination stations. For example: 'Doraville to Midtown'.")
+		response.append(message)
 
 	return str(response)
 
