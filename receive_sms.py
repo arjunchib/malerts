@@ -52,7 +52,7 @@ def sms_reply():
 	stripped_request_body = lower_request_body.strip(",.!?/&-:;@'...")
 	bodyArray = stripped_request_body.split(" ")
 
-	waysToSayHi = ["hi", "hello", "hell", "howdy", "hh", "bonqour", "aloha", "hallo", "halo", "hey", "wassup", "wessup", "what is up", "whats up", "what's up", "hi there", "hithere", "yo", "sup"]
+	waysToSayHi = ["hi", "hello", "hell", "howdy", "hh", "bonjour", "aloha", "hallo", "halo", "hey", "wassup", "wessup", "what is up", "whats up", "what's up", "hi there", "hithere", "yo", "sup"]
 
 	# checks to see if hi or similar is in text
 	for hi in waysToSayHi:
