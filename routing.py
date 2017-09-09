@@ -32,7 +32,6 @@ def findRouteHelper(origin, dest, route):
     elif len(intersects) == 0:
         dest_line_name = min(dest_lines).name
         transfer = min(origin_lines).transfers[dest_line_name]
-        # transfer_lines = findLinesWithStation(transfer)
         route.append({
             "lines": origin_lines,
             "direction": findDirection(origin, transfer, min(origin_lines)),
@@ -47,14 +46,14 @@ def findLinesWithStation(station):
     if now_eastern.hour < 5 and now_eastern.hour > 1 and now_eastern.minute > 30:
         return lines
     if station in red.stations:
-        if now_eastern.hour > 21:
+        if now_eastern.hour > 21 and now_eastern.hour < 2:
             lines.add(red_night)
         else:
             lines.add(red)
     if station in gold.stations:
         lines.add(gold)
     if station in green.stations:
-        if now_eastern.hour > 21:
+        if now_eastern.hour > 21 and now_eastern.hour < 2:
             lines.add(green_night)
         else:
             lines.add(green)

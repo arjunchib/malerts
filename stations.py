@@ -13,8 +13,25 @@ class Line:
     def __repr__(self):
         return self.name
 
+    def __hash__(self):
+        return hash((self.name))
+
+    def __cmp__(self, other):
+        if self.name < other.name:
+            return -1
+        elif self.name == other.name:
+            return 0
+        else:
+            return 1
+
     def __eq__(self, other):
         return self.name == other.name
+
+    def __lt__(self, other):
+        return self.name < other.name
+
+    def __gt__(self, other):
+        return self.name > other.name
 
 red = Line(
     "red",
