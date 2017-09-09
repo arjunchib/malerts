@@ -106,12 +106,12 @@ def sms_reply():
 				output += " Take the "
 			else:
 				output += " Then take the "
-			if len(leg.lines) == 1:
-				output += min(leg.lines) + " line "
-			elif len(leg.lines) == 2:
-				output += min(leg.lines) + " or " + max(leg.lines) + " lines "
-			output += leg.direction.name + "BOUND to "
-			output += leg.destination + " station."
+			if len(leg["lines"]) == 1:
+				output += min(leg["lines"]).name + " line "
+			elif len(leg["lines"]) == 2:
+				output += min(leg["lines"]).name + " or " + max(leg["lines"]).name + " lines "
+			output += leg["direction"].name + "BOUND to "
+			output += leg["destination"] + " station."
 			counter += 1
 
 		message.body(output)
