@@ -4,6 +4,7 @@ from twilio.twiml.messaging_response import Body, Media, Message, MessagingRespo
 # from difflib import SequenceMatcher
 from difflib import get_close_matches
 from stations import getStationsDict
+from routing import findRoute
 
 # def similar(a, b):
 #     return SequenceMatcher(None, a, b).ratio()
@@ -94,8 +95,23 @@ def sms_reply():
 
 		finalOrigin = stationsDict[originFinalKey]
 		finalDestination = stationsDict[destinationFinalKey]
-			
-		message.body("Cool. So you're going from " + finalOrigin + " to " + finalDestination + ". Let me check on that!")
+
+		output = "Cool. So you're going from " + finalOrigin + " to " + finalDestination + "."
+
+		route = findRoute(finalOrigin, finalDestination)
+
+		counter = 0
+		for leg in route:
+			counter += 1
+			output += " (" + counter + ") Take the "
+			if len(leg.lines) == 1:
+				output += min(leg.lines) + " line "
+			elif len(leg.lines) == 2:
+				output += min(leg.lines) + " or " + max(leg.lines) + " lines "
+			output += leg.direction.name + "BOUND to "
+			output += leg.destination + " station."
+
+		message.body(output)
 		response.append(message)
 
 	# if text says something invalid
