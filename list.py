@@ -1,7 +1,7 @@
 red =
 Line(
     "red",
-    ["North Springs", "Sandy Springs", "Dunwoody", "Medical Center", "Buckhead", "Lindbergh Center", "Art Center", "Midtown", "North Avenue", "Civic Center", "Peachtree Center", "Five Points", "Garnett", "Oakland City", "Lakewood", "East Point", "College Park", "Airport"],
+    ["North Springs", "Sandy Springs", "Dunwoody", "Medical Center", "Buckhead", "Lindbergh Center", "Arts Center", "Midtown", "North Avenue", "Civic Center", "Peachtree Center", "Five Points", "Garnett", "West End", "Oakland City", "Lakewood/Ft. McPherson", "East Point", "College Park", "Airport"],
     {
         gold: "Lindbergh Center",
         green: "Five Points",
@@ -24,7 +24,7 @@ Line(
 gold =
 Line(
     "gold",
-    ["Doravile", "Chamblee", "Brookhaven/Oglethorpe", "Lenox", "Lindbergh Center", "Art Center", "Midtown", "North Avenue", "Civic Center", "Peachtree Center", "Five Points", "Garnett", "West End", "Oakland City", "Lakewood/Fort McPherson", "East Point", "College Park", "Airport"],
+    ["Doraville", "Chamblee", "Brookhaven/Oglethorpe", "Lenox", "Lindbergh Center", "Arts Center", "Midtown", "North Avenue", "Civic Center", "Peachtree Center", "Five Points", "Garnett", "West End", "Oakland City", "Lakewood/Ft. McPherson", "East Point", "College Park", "Airport"],
     {
         red: "Lindbergh Center",
         green: "Five Points",
@@ -34,7 +34,7 @@ Line(
 
 blue =
 Line("blue",
-    ["Indian Creek", "Kensington", "Avondale", "Decatur", "East Lake", "Edgewood", "Candler Park", "Inman Park", "Reynoldstown", "King Memorial", "Georgia State", "Five Points", "Dome", "Philips Areana", "CNN Center", "Vine City", "Ashby", "West Lake", "Hamilton E. Holmes"],
+    ["Hamilton E. Holmes", "West Lake", "Ashby", "Vine City", "Dome/GWCC/Philips Arena/CNN Center", "Five Points", "Georgia State", "King Memorial", "Inman Park/Reynoldstown", "Edgewood/Candler Park", "East Lake", "Decatur", "Avondale", "Kensington", "Indian Creek"],
     {
         red: "Five Points",
         gold: "Five Points"
@@ -44,7 +44,7 @@ Line("blue",
 
 green =
 Line("green",
-    ["Edgewood", "Candler Park", "Inman Park", "Reynoldstown", "King Memorial", "Georgia State", "Five Points", "Dome", "Philips Areana", "CNN Center", "Vine City", "Ashby", "Bankhead"],
+    ["Bankhead", "Ashby", "Vine City", "Dome/GWCC/Philips Arena/CNN Center", "Five Points", "Georgia State", "King Memorial", "Inman Park/Reynoldstown", "Edgewood/Candler Park"],
     {
         red: "Five Points",
         gold: "Five Points"
@@ -54,7 +54,7 @@ Line("green",
 
 green_night =
 Line("green",
-    ["Edgewood", "Candler Park", "Inman Park", "Reynoldstown", "King Memorial", "Georgia State", "Five Points", "Dome", "Philips Areana", "CNN Center", "Vine City", "Ashby", "Bankhead"],
+    ["Bankhead", "Ashby", "Vine City"],
     {
         red: "Vine City",
         gold: "Vine City"
