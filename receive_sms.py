@@ -77,8 +77,8 @@ def sms_reply():
 		stationsDict = getStationsDict()
 		keys = stationsDict.keys()
 
-		originFinalKeyList = get_close_matches(origin.capitalize(), keys, 1)
-		destinationFinalKeyList = get_close_matches(destination.capitalize(), keys, 1)
+		originFinalKeyList = get_close_matches(origin.lower(), keys, 1)
+		destinationFinalKeyList = get_close_matches(destination.lower(), keys, 1)
 
 		# if text contains "to" but does not contain valid station names
 		if (len(originFinalKeyList) == 0 or len(destinationFinalKeyList) == 0):

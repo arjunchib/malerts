@@ -101,5 +101,5 @@ def getStationsDict():
             stations.append(sta)
     for sta in stations:
         for word in sta.split("/"):
-            stations_dict[word] = sta
+            stations_dict[word.lower()] = sta
     return stations_dict
