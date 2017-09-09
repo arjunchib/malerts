@@ -13,7 +13,8 @@ class Line:
     def __repr__(self):
         return self.name
 
-        
+    def __eq__(self, other):
+        return self.name == other.name
 
 red = Line(
     "red",
@@ -74,7 +75,14 @@ green_night = Line("green",
     night=True
 )
 
-stations = [
-    "Edgewood": "Edgewood/Candler Park"
-    "Candler Park": "Edgewood/Candler Park"
-]
+def getStationsDict():
+    stations_dict = {}
+    stations = []
+    all_stations = red.stations + gold.stations + green.stations + blue.stations
+    for sta in all_stations:
+        if sta not in stations:
+            stations.append(sta)
+    for sta in stations:
+        for word in sta.split("/"):
+            stations_dict[word] = sta
+    return stations_dict
