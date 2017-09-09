@@ -1,12 +1,28 @@
 from flask import Flask, request, redirect
 import os
 from twilio.twiml.messaging_response import Body, Media, Message, MessagingResponse
+from difflib import SequenceMatcher
+
+def similar(a, b):
+    return SequenceMatcher(None, a, b).ratio()
 
 app = Flask(__name__)
-saidHello = False
 
 @app.route("/", methods=['GET', 'POST'])
 def sms_reply():
+
+	stationsOld = set([
+		"North Springs", "Sandy Springs", "Dunwoody", "Medical Center", "Buckhead", "Lindbergh Center", "Arts Center", "Midtown", "North Avenue", "Civic Center", "Peachtree Center", "Five Points", "Garnett", "West End", "Oakland City", "Lakewood/Ft. McPherson", "East Point", "College Park", "Airport",
+		"Doraville", "Chamblee", "Brookhaven/Oglethorpe", "Lenox", "Lindbergh Center", "Arts Center", "Midtown", "North Avenue", "Civic Center", "Peachtree Center", "Five Points", "Garnett", "West End", "Oakland City", "Lakewood/Ft. McPherson", "East Point", "College Park", "Airport",
+		"Bankhead", "Ashby", "Vine City", "Dome/GWCC/Philips Arena/CNN Center", "Five Points", "Georgia State", "King Memorial", "Inman Park/Reynoldstown", "Edgewood/Candler Park",
+		"Hamilton E. Holmes", "West Lake", "Ashby", "Vine City", "Dome/GWCC/Philips Arena/CNN Center", "Five Points", "Georgia State", "King Memorial", "Inman Park/Reynoldstown", "Edgewood/Candler Park", "East Lake", "Decatur", "Avondale", "Kensington", "Indian Creek"
+	])
+	stationsOld = list(stationsOld)
+	stations = []
+	for i in stationsOld:
+		i = i.lower()
+		stations.append(i)
+
 
 	# Take 1: Old SDK SMS - passed
 	# resp = MessagingResponse()
@@ -27,51 +43,52 @@ def sms_reply():
 	# response.append(message)
 	# return str(response)
 
-	global saidHello
 	response = MessagingResponse()
+	message = Message()
 	request_body = request.values.get("Body", None)
-
 	lower_request_body = request_body.lower()
 	stripped_request_body = lower_request_body.strip(",.!?/&-:;@'...")
+	bodyArray = stripped_request_body.split(" ")
+	print(stripped_request_body)
 
-	# waysToSayHi = ["hi", "hello", "hell", "howdy", "hh", "bonqour", "aloha", "hallo", "halo", "hey", "wassup", "wessup", "what is up", "whats up", "what's up", "hi there", "hithere", "yo"]
-	# waysToSayTo = ["to", "two", "2"]
+	waysToSayHi = ["hi", "hello", "hell", "howdy", "hh", "bonqour", "aloha", "hallo", "halo", "hey", "wassup", "wessup", "what is up", "whats up", "what's up", "hi there", "hithere", "yo", "sup"]
 
-	# if (hi in stripped_request_body for hi in waysToSayHi):
-	# 	print("Successful hi")
-	# if (to in stripped_request_body for to in waysToSayTo):
-	# 	print("Successful to")
+	# if text says "hi" or similar, similar() must return 90% or 0.9
+	# if (similar(stripped_request_body, hi) >= 0.9 for hi in waysToSayHi):
+	# if (hi in bodyArray[0] for hi in waysToSayHi): <-- one line for loop did not work
 
-	# ^ PROBLEM: successful to and successful hi being printed for literally every single line, thus simple if else
-
-	# if someone says hi
-	# if (not saidHello and hi in stripped_request_body for hi in waysToSayHi):
-	# if ((not saidHello) and (hi in stripped_request_body for hi in waysToSayHi)):
-	if (not saidHello):
-		print("Saying hi")
-		message = Message()
-		message.body("Hi, I'm Martan from mAlerts! If you need a MARTA map, I gotchu. Please text me an origin and a destination. For example: Doraville to Midtown")
-		message.media("http://www.itsmarta.com/images/train-stations-map.jpg")
-		response.append(message)
-		saidHello = True
-
-
-	# once marten has said hello
-	# elif (saidHello and to in stripped_request_body for to in waysToSayTo):
-	else:
-		print("Got origin and destination")
-		message = Message()
-		bodyArray = stripped_request_body.split(" ")
-
-		if (not "to" in bodyArray):
-			message.body("Hmm, you didn't use the right format... Please use the correct format and text me again.")
+	# checks to see if hi or similar is in text
+	for hi in waysToSayHi:
+		if hi in bodyArray:
+			print("Text says hi")
+			message.body("Hi, I'm Martan from mAlerts! If you need a MARTA map, I got you. Please text me an origin and a destination. For example: Doraville to Midtown")
+			message.media("http://www.itsmarta.com/images/train-stations-map.jpg")
 			response.append(message)
 			return str(response)
 
-		origin = bodyArray[0]
-		destination = bodyArray[-1]
-		message.body("Cool. So you're going from " + origin + " to " + destination + ". Let me check on that")
+	# if text says "<station> to <station>""
+	if ("to" in bodyArray):
+		print("Text says <station> to <station>")
+
+		toIndex = bodyArray.index("to")
+		origin = ' '.join(bodyArray[0:toIndex])
+		print(origin)
+		destination = ' '.join(bodyArray[toIndex+1:])
+		print(destination)
+
+		# if text contains "to" but does not contain valid station names
+		if (origin not in stations or destination not in stations):
+			print("Text contains to but not valid station names")
+			message.body("Hmm, you didn't use the right format... Please text me a valid origin and a destination. For example: Doraville to Midtown")
+			response.append(message)
+			return str(response)
+
+		message.body("Cool. So you're going from " + origin.capitalize() + " to " + destination.capitalize() + ". Let me check on that!")
 		response.append(message)
+
+	# if text says something invalid
+	else:
+		message.body("Hey, it looks like you said something not valid! Just send me a hello or your origin and destination stations. For example: Doraville to Midtown")
 
 
 	return str(response)
