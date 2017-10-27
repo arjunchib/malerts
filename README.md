@@ -1,4 +1,7 @@
 # malerts
+
+Marta Hackathon 2017
+
 MARTA SMS notifications to help navigate rail service
 
 To run server:
